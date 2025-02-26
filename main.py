@@ -18,8 +18,8 @@ def main():
     layers = [2, 20, 40, 20, 1]
     mlp = MLPModel(
         layers,
-        hidden_activation=ReLUActivation(),
-        output_activation=SigmoidActivation(),
+        hidden_activation="relu",
+        output_activation="sigmoid",
         seed=42,
     )
 

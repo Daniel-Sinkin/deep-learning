@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from enum import Enum, auto
 
 import numpy as np
 
@@ -26,3 +27,11 @@ class SigmoidActivation(ActivationFunction):
     def derivative(self, x: np.ndarray) -> np.ndarray:
         s = self.forward(x)
         return s * (1 - s)
+
+
+class IdentityActivation(ActivationFunction):
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        return x
+
+    def derivative(self, x: np.ndarray) -> np.ndarray:
+        return x

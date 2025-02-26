@@ -1,39 +1,16 @@
-from abc import ABC, abstractmethod
-
 import numpy as np
 
-
-class ActivationFunction(ABC):
-    @abstractmethod
-    def forward(self, x: np.ndarray) -> np.ndarray: ...
-
-    @abstractmethod
-    def derivative(self, x: np.ndarray) -> np.ndarray: ...
-
-
-class ReLUActivation(ActivationFunction):
-    def forward(self, x: np.ndarray) -> np.ndarray:
-        return np.maximum(0, x)
-
-    def derivative(self, x: np.ndarray) -> np.ndarray:
-        return (x > 0).astype(np.float32)
-
-
-class SigmoidActivation(ActivationFunction):
-    def forward(self, x: np.ndarray) -> np.ndarray:
-        return 1 / (1 + np.exp(-x))
-
-    def derivative(self, x: np.ndarray) -> np.ndarray:
-        s = self.forward(x)
-        return s * (1 - s)
+from .constants import activation_function_map
 
 
 class MLPModel:
-    def __init__(self, layers, hidden_activation, output_activation, seed=None):
+    def __init__(
+        self, layers, hidden_activation: str, output_activation: str, seed=None
+    ):
         np.random.seed(seed)
         self.layers = layers
-        self.hidden_activation = hidden_activation
-        self.output_activation = output_activation
+        self.hidden_activation = activation_function_map[hidden_activation]()
+        self.output_activation = activation_function_map[output_activation]()
 
         self.weights = []
         self.biases = []
@@ -75,7 +52,6 @@ class MLPModel:
         return a
 
     def backprop(self, x, y, lr=0.001):
-        assert self.has_run_forward
         out = self.forward(x)
 
         delta = out - y
