@@ -3,7 +3,15 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 
-class ReLUActivation(ABC):
+class ActivationFunction(ABC):
+    @abstractmethod
+    def forward(self, x: np.ndarray) -> np.ndarray: ...
+
+    @abstractmethod
+    def derivative(self, x: np.ndarray) -> np.ndarray: ...
+
+
+class ReLUActivation(ActivationFunction):
     def forward(self, x: np.ndarray) -> np.ndarray:
         return np.maximum(0, x)
 
@@ -11,7 +19,7 @@ class ReLUActivation(ABC):
         return (x > 0).astype(np.float32)
 
 
-class SigmoidActivation(ABC):
+class SigmoidActivation(ActivationFunction):
     def forward(self, x: np.ndarray) -> np.ndarray:
         return 1 / (1 + np.exp(-x))
 
@@ -29,6 +37,11 @@ class MLPModel:
 
         self.weights = []
         self.biases = []
+
+        self.activations = None
+        self.zs = None
+
+        self.has_run_forward = False
 
         # He initialization for ReLU layers
         for i in range(len(layers) - 1):
@@ -62,20 +75,17 @@ class MLPModel:
         return a
 
     def backprop(self, x, y, lr=0.001):
-        # forward pass
+        assert self.has_run_forward
         out = self.forward(x)
 
-        # cross-entropy derivative for Sigmoid output
         delta = out - y
 
         grad_w = [None] * (len(self.layers) - 1)
         grad_b = [None] * (len(self.layers) - 1)
 
-        # Output layer
         grad_w[-1] = delta @ self.activations[-2].T
         grad_b[-1] = np.mean(delta, axis=1, keepdims=True)
 
-        # Hidden layers
         for i in range(len(self.layers) - 2, 0, -1):
             z = self.zs[i - 1]
             # derivative of hidden activation
@@ -85,12 +95,10 @@ class MLPModel:
             grad_w[i - 1] = delta @ self.activations[i - 1].T
             grad_b[i - 1] = np.mean(delta, axis=1, keepdims=True)
 
-        # Update
         for i in range(len(self.layers) - 1):
             self.weights[i] -= lr * grad_w[i]
             self.biases[i] -= lr * grad_b[i]
 
-        # cross-entropy loss
         eps = 1e-9
         loss = -np.mean(y * np.log(out + eps) + (1 - y) * np.log(1 - out + eps))
         return loss
