@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from enum import Enum, auto
 
 import numpy as np
 

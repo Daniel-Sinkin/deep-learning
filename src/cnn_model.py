@@ -84,10 +84,9 @@ class CNNModel(Model):
         output_x = self.compute_output_size(w, is_y=False)
         output = np.zeros(shape=(batch_size, self.c_out, output_y, output_x))
         for sample_idx in range(batch_size):
-            sample = x[sample_idx, :, :, :]
             for channel_out_idx in range(self.c_out):
-                output[sample, channel_out_idx, :, :] = conv2d(
-                    sample=sample,
+                output[sample_idx, channel_out_idx, :, :] = conv2d(
+                    sample=x[sample_idx, :, :, :],
                     filter_=self.W,
                     bias=self.bias[channel_out_idx],
                     padding=self.padding,

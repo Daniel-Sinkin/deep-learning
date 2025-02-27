@@ -20,7 +20,6 @@ def conv2d(
     output_x = (input_x - filter_x + 2 * padding) // stride + 1
 
     output = np.zeros((output_y, output_x), dtype=sample.dtype)
-
     patch = np.zeros((filter_y, filter_x), dtype=sample.dtype)
 
     for y in range(output_y):
