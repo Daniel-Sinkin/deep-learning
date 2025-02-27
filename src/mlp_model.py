@@ -20,18 +20,17 @@ class MLPModel:
 
         self.has_run_forward = False
 
-        # He initialization for ReLU layers
         for i in range(len(layers) - 1):
-            fan_in = layers[i]
-            fan_out = layers[i + 1]
+            n_in = layers[i]
+            n_out = layers[i + 1]
             if i < len(layers) - 2:
-                # Hidden layer => ReLU => use He init
-                std = np.sqrt(2.0 / fan_in)
+                # Kaiming Initialization for ReLU (https://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf)
+                std = np.sqrt(2.0 / n_in)
             else:
-                # Output layer => Sigmoid => use something moderate
-                std = np.sqrt(1.0 / fan_in)
-            W = np.random.normal(0, std, size=(fan_out, fan_in))
-            b = np.zeros((fan_out, 1))
+                # Xavier Initialization for Sigmoid (https://arxiv.org/abs/1502.01852)
+                std = 2 / (n_in + n_out)
+            W = np.random.normal(0, std, size=(n_out, n_in))
+            b = np.zeros((n_out, 1))
             self.weights.append(W)
             self.biases.append(b)
 
@@ -64,7 +63,6 @@ class MLPModel:
 
         for i in range(len(self.layers) - 2, 0, -1):
             z = self.zs[i - 1]
-            # derivative of hidden activation
             d_act = self.hidden_activation.derivative(z)
             delta = (self.weights[i].T @ delta) * d_act
 
