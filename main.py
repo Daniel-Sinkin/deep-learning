@@ -25,7 +25,7 @@ def main():
 
     losses = []
     for epoch in range(3000):
-        loss = mlp.backprop(X, y, lr=0.001)  # smaller LR
+        loss = mlp.backward(X, y, lr=0.001)  # smaller LR
         losses.append(loss)
         if epoch % 500 == 0:
             print(f"Epoch {epoch}, Loss = {loss:.4f}")

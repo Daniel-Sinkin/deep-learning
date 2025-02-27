@@ -1,16 +1,15 @@
 import numpy as np
 
-from .constants import activation_function_map
+from .activation_function import ReLUActivation, SigmoidActivation
+from .nn import Model
 
 
-class MLPModel:
-    def __init__(
-        self, layers, hidden_activation: str, output_activation: str, seed=None
-    ):
+class MLPModel(Model):
+    def __init__(self, layers: list[int], seed=None):
         np.random.seed(seed)
         self.layers = layers
-        self.hidden_activation = activation_function_map[hidden_activation]()
-        self.output_activation = activation_function_map[output_activation]()
+        self.hidden_activation = ReLUActivation()
+        self.output_activation = SigmoidActivation()
 
         self.weights = []
         self.biases = []
@@ -50,7 +49,7 @@ class MLPModel:
             self.activations.append(a)
         return a
 
-    def backprop(self, x, y, lr=0.001):
+    def backward(self, x, y, lr=0.001) -> float:
         out = self.forward(x)
 
         delta = out - y
