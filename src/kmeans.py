@@ -17,13 +17,21 @@ class KMeans:
     Use the `KMeans.from_blobs()` function to quickly get an example.
     """
 
-    def __init__(self, data, K: int = 3, seed=None):
+    def __init__(
+        self, data, K: int = 3, centroids: Optional[np.ndarray] = None, seed=None
+    ):
         self.data = data
         self.K = K
 
-        _rng = np.random.default_rng(seed=seed)
-        centroid_idxs = _rng.choice(range(len(data)), K, replace=False)
-        self.centroids = data[centroid_idxs]
+        if centroids is None:
+            _rng = np.random.default_rng(seed=seed)
+            centroid_idxs = _rng.choice(range(len(data)), K, replace=False)
+            self.centroids = data[centroid_idxs]
+        else:
+            self.centroids = centroids
+
+    def __call__(self) -> bool:
+        return self.update()
 
     def __len__(self) -> int:
         return len(self.data)
@@ -34,8 +42,9 @@ class KMeans:
             [((self.data - centroid) ** 2).sum(axis=1) for centroid in self.centroids]
         )
 
-    def get_error(self) -> np.ndarray:
+    def get_cost(self) -> np.ndarray:
         """
+        Computes the total cost / objective function value of the clustering, i.e., returns
         J = sum_{n = 1}^N sum_{k = 1}^K r_{nk} ||x_n - mu_k||^2
         where
         r_nk = 1 if k = arg min_j ||x_n - mu_j||^2 and 0 otherwise.
@@ -77,7 +86,7 @@ class KMeans:
             )
 
         centroids_str = list(map(lambda x: f"({x[0]:.2f}, {x[1]:.2f})", self.centroids))
-        error = self.get_error()
+        error = self.get_cost()
         error_rel = error / len(self)
         titles = [
             "Clustering Visualization",
@@ -87,8 +96,9 @@ class KMeans:
         plt.title("\n".join(titles))
         plt.legend()
 
-        if filepath:
+        if filepath is not None:
             plt.savefig(filepath, dpi=300)
+
         if show_fig:
             plt.show()
         else:
@@ -108,21 +118,36 @@ class KMeans:
         return (cluster_assignments_before != cluster_assignments_after).any()
 
     @staticmethod
-    def from_blobs(K: int = 4, n_samples: int = 1000, cluster_std=0.6) -> "KMeans":
+    def from_blobs(K: int = 4, n_samples: int = 1000, cluster_std=0.6) -> KMeans:
         """Returns a KMeans object"""
         samples, _ = make_blobs(
             n_samples=n_samples, centers=K, cluster_std=cluster_std, random_state=0
         )
         return KMeans(data=samples, K=K)
 
+    @staticmethod
+    def get_lowest_cost_centroid_after_n_step(data, K, n_steps: int = 10) -> np.ndarray:
+        """Runs n_steps of clustering, returning the centroids with the lowest cost of those."""
+        kmeans = KMeans(data=data, K=K)
+        cost_centroids_list = [(kmeans.get_cost(), kmeans.centroids)]
+        for _ in range(n_steps):
+            if not kmeans.update():
+                # Steps if we already found a (local) minimum with KMeans
+                break
+            cost_centroids_list.append((kmeans.get_cost(), kmeans.centroids))
+
+        _, centroid = sorted(cost_centroids_list, key=lambda x: x[0])[0]
+        return centroid
+
 
 def main() -> None:
+    """Runs Kmeans until there is no more improvement, saves every iteration as screenshots."""
     iteration = 0
     kmeans = KMeans.from_blobs()
     kmeans.plot(show_fig=False, filepath=f"./screenshots/kmeans/{iteration}.png")
     iteration += 1
 
-    while kmeans.update():
+    while kmeans():
         kmeans.plot(show_fig=False, filepath=f"./screenshots/kmeans/{iteration}.png")
         iteration += 1
 
