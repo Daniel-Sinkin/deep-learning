@@ -151,8 +151,10 @@ def main() -> None:
         kmeans.plot(show_fig=False, filepath=f"./screenshots/kmeans/{iteration}.png")
         iteration += 1
 
-    kmeans.plot(show_fig=False, filepath=f"./screenshots/kmeans/{iteration}.png")
-    iteration += 1
+    # If we immediately stopped then we don't need to make a final screenshot
+    if iteration > 1:
+        kmeans.plot(show_fig=False, filepath=f"./screenshots/kmeans/{iteration}.png")
+        iteration += 1
 
 
 if __name__ == "__main__":
