@@ -1,4 +1,4 @@
-"""dataloader for the MNIST dataset"""
+"""Dataloader for the MNIST dataset"""
 
 import struct
 from array import array

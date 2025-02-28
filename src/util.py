@@ -1,3 +1,7 @@
+"""
+Handles utility functionality like adaptive learning rate.
+"""
+
 import numpy as np
 
 
@@ -33,7 +37,8 @@ def main() -> None:
 
     ts = np.linspace(t_min, t_max, num_t)
 
-    lrs_step = map(
+    # LRS step doesn't plot as nicely so we fake it
+    _ = map(
         lambda t: LearningRateScheduling.step_decay(
             t, lr_min=lr_min, lr_max=lr_max, t_threshold=t_threshold
         ),

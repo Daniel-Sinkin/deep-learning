@@ -1,3 +1,5 @@
+"""Contains MLPModel Implementation"""
+
 import numpy as np
 
 from .activation_function import ReLUActivation, SigmoidActivation
@@ -5,6 +7,8 @@ from .nn import Model
 
 
 class MLPModel(Model):
+    """Multi-Layer Perceptron Model"""
+
     def __init__(self, layers: list[int], seed=None):
         np.random.seed(seed)
         self.layers = layers

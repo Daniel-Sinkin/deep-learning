@@ -1,3 +1,5 @@
+"""Implementation of CNN Model."""
+
 import numpy as np
 
 from .activation_function import SigmoidActivation

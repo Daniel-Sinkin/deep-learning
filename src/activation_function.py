@@ -1,20 +1,28 @@
+"""Contains the activation Functions that we use."""
+
 from abc import ABC, abstractmethod
 
 import numpy as np
 
 
 class ActivationFunction(ABC):
-    @abstractmethod
-    def forward(self, x: np.ndarray) -> np.ndarray: ...
+    """Activation Function"""
 
     @abstractmethod
-    def derivative(self, x: np.ndarray) -> np.ndarray: ...
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        """Forward pass applying the activation function element-wise."""
+
+    @abstractmethod
+    def derivative(self, x: np.ndarray) -> np.ndarray:
+        """Derivative of Forward pass for backpropagation."""
 
     def __call__(self, *args, **kwargs):
         return self.forward(*args, **kwargs)
 
 
 class ReLUActivation(ActivationFunction):
+    """ReLU"""
+
     def forward(self, x: np.ndarray) -> np.ndarray:
         return np.maximum(0, x)
 
@@ -23,6 +31,8 @@ class ReLUActivation(ActivationFunction):
 
 
 class SigmoidActivation(ActivationFunction):
+    """Sigmoid"""
+
     def forward(self, x: np.ndarray) -> np.ndarray:
         """
         Computes the sigmoid function inplace on a specifically allocated memory chunk, this is
@@ -40,6 +50,8 @@ class SigmoidActivation(ActivationFunction):
 
 
 class IdentityActivation(ActivationFunction):
+    """Linear Activation."""
+
     def forward(self, x: np.ndarray) -> np.ndarray:
         return x
 

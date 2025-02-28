@@ -1,6 +1,6 @@
-from __future__ import annotations
+"""Implementation of the EM Algorithm."""
 
-from typing import Optional
+from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -128,8 +128,8 @@ class ExpectationMaximization:
 
     def plot(self, show_fig: bool = True, filepath=None) -> None:
         """
-        Visualize the current state of the EM algorithm.
-        Plots the data points colored by their most likely cluster and overlays the Gaussian ellipses.
+        Visualize the current state of the EM algorithm. Plots the data points colored by their most
+        likely cluster and overlays the Gaussian ellipses.
         """
         if self.gamma is None:
             self.gamma = self.compute_gamma(self.data, self.pis, self.mus, self.sigmas)
