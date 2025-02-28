@@ -57,7 +57,7 @@ class KMeans:
 
     def plot(self, show_fig: bool = True, filepath: Optional[str] = None) -> None:
         """Plots the cluster. Add a filepath if you want to save the plot."""
-        plt.figure(figsize=(16, 9))
+        plt.figure(figsize=(12, 9))
 
         cmap = plt.get_cmap("viridis")
         colors = cmap(np.linspace(0, 1, len(self.centroids)))
@@ -80,17 +80,17 @@ class KMeans:
                 self.centroids[i][1],
                 s=100,
                 alpha=1.0,
-                c="black",
+                c="red",
                 zorder=10,
                 marker="x",
             )
 
         centroids_str = list(map(lambda x: f"({x[0]:.2f}, {x[1]:.2f})", self.centroids))
-        error = self.get_cost()
-        error_rel = error / len(self)
+        cost = self.get_cost()
+        cost_rel = cost / len(self)
         titles = [
             "Clustering Visualization",
-            f"n_samples = {len(self)}, K = {self.K}, error = {error:.2f} ({error_rel:.2f} per sample)",
+            f"n_samples = {len(self)}, K = {self.K}, cost = {cost:.2f} ({cost_rel:.2f} per sample)",
             f"Centroids = {centroids_str}",
         ]
         plt.title("\n".join(titles))
@@ -126,18 +126,24 @@ class KMeans:
         return KMeans(data=samples, K=K)
 
     @staticmethod
-    def get_lowest_cost_centroid_after_n_step(data, K, n_steps: int = 10) -> np.ndarray:
+    def get_lowest_cost_centroid_after_n_step(
+        data: np.ndarray, K: int, n_steps: int = 10
+    ) -> np.ndarray:
         """Runs n_steps of clustering, returning the centroids with the lowest cost of those."""
         kmeans = KMeans(data=data, K=K)
-        cost_centroids_list = [(kmeans.get_cost(), kmeans.centroids)]
+
+        min_cost = kmeans.get_cost()
+        min_centroids = kmeans.centroids
         for _ in range(n_steps):
             if not kmeans.update():
                 # Steps if we already found a (local) minimum with KMeans
                 break
-            cost_centroids_list.append((kmeans.get_cost(), kmeans.centroids))
+            new_cost = kmeans.get_cost()
+            if new_cost < min_cost:
+                min_cost = new_cost
+                min_centroids = kmeans.centroids
 
-        _, centroid = sorted(cost_centroids_list, key=lambda x: x[0])[0]
-        return centroid
+        return min_centroids
 
 
 def main() -> None:
