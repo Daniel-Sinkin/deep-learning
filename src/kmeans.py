@@ -25,16 +25,30 @@ class KMeans:
         centroid_idxs = _rng.choice(range(len(data)), K, replace=False)
         self.centroids = data[centroid_idxs]
 
-    def get_assignments(self) -> np.ndarray:
-        """Gets a numpy array with the current cluster assignments."""
-        dists = np.array(
+    def __len__(self) -> int:
+        return len(self.data)
+
+    def get_dists(self) -> np.ndarray:
+        """Gets the distances of the data to the centroids."""
+        return np.array(
             [((self.data - centroid) ** 2).sum(axis=1) for centroid in self.centroids]
         )
-        return dists.argmin(axis=0)
+
+    def get_error(self) -> np.ndarray:
+        """
+        J = sum_{n = 1}^N sum_{k = 1}^K r_{nk} ||x_n - mu_k||^2
+        where
+        r_nk = 1 if k = arg min_j ||x_n - mu_j||^2 and 0 otherwise.
+        """
+        return self.get_dists().sum()
+
+    def get_assignments(self) -> np.ndarray:
+        """Gets a numpy array with the current cluster assignments."""
+        return self.get_dists().argmin(axis=0)
 
     def plot(self, show_fig: bool = True, filepath: Optional[str] = None) -> None:
         """Plots the cluster. Add a filepath if you want to save the plot."""
-        plt.tight_layout()
+        plt.figure(figsize=(16, 9))
 
         cmap = plt.get_cmap("viridis")
         colors = cmap(np.linspace(0, 1, len(self.centroids)))
@@ -62,16 +76,23 @@ class KMeans:
                 marker="x",
             )
 
-        title_str = list(map(lambda x: f"({x[0]:.2f}, {x[1]:.2f})", self.centroids))
-        plt.title(f"Clustering Visualization\nCentroids = {title_str}")
+        centroids_str = list(map(lambda x: f"({x[0]:.2f}, {x[1]:.2f})", self.centroids))
+        error = self.get_error()
+        error_rel = error / len(self)
+        titles = [
+            "Clustering Visualization",
+            f"n_samples = {len(self)}, K = {self.K}, error = {error:.2f} ({error_rel:.2f} per sample)",
+            f"Centroids = {centroids_str}",
+        ]
+        plt.title("\n".join(titles))
         plt.legend()
 
         if filepath:
-            plt.savefig(filepath)
+            plt.savefig(filepath, dpi=300)
         if show_fig:
             plt.show()
         else:
-            plt.clf()
+            plt.close()
 
     def update(self) -> bool:
         """Modifies centroids inplace, returns True if the centroids changed."""
