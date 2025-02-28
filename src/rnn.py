@@ -2,8 +2,8 @@
 
 import numpy as np
 
-from src.activation_function import TanhActivation
-from src.nn import Model
+from .activation_function import TanhActivation
+from .nn import Model
 
 
 class RNNModel(Model):
@@ -50,6 +50,9 @@ class RNNModel(Model):
             ys[t, :] = self.h
 
         assert ys.shape == (sequence_length, self.d_out)
+
+        self.has_run_forward = True
+
         return ys
 
     def backward(self, x, y, lr=0.001) -> float:

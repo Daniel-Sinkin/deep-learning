@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import torch
 
-from src.rnn import RNNModel
+from .rnn import RNNModel
 
 
 @pytest.fixture
