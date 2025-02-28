@@ -1,4 +1,4 @@
-"""Contains MLPModel Implementation"""
+"""Contains LSTM Implementation"""
 
 import numpy as np
 
@@ -6,8 +6,8 @@ from .activation_function import SigmoidActivation, TanhActivation
 from .nn import Model
 
 
-class LSTMCell(Model):
-    """Recurrent Neural Network Model using float32 throughout."""
+class LSTM(Model):
+    """Long Short-Term Memory"""
 
     def __init__(self, d_in: int, d_out: int, seed=None):
         assert isinstance(d_in, int) and d_in >= 1

@@ -1,4 +1,4 @@
-"""Contains MLPModel Implementation"""
+"""Contains RNN Implementation"""
 
 import numpy as np
 

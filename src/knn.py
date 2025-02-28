@@ -1,3 +1,5 @@
+"""Contains K-Nearest Neighbor implementation."""
+
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -5,6 +7,8 @@ from sklearn.datasets import make_blobs
 
 
 class KNN:
+    """K-Nearest Neighbor"""
+
     def __init__(self, samples, target):
         self.samples = samples
         self.target = target
