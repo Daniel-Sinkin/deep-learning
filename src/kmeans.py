@@ -116,7 +116,7 @@ class KMeans:
         return KMeans(data=samples, K=K)
 
 
-if __name__ == "__main__":
+def main() -> None:
     iteration = 0
     kmeans = KMeans.from_blobs()
     kmeans.plot(show_fig=False, filepath=f"./screenshots/kmeans/{iteration}.png")
@@ -128,3 +128,7 @@ if __name__ == "__main__":
 
     kmeans.plot(show_fig=False, filepath=f"./screenshots/kmeans/{iteration}.png")
     iteration += 1
+
+
+if __name__ == "__main__":
+    main()
