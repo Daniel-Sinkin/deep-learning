@@ -39,7 +39,7 @@ class SigmoidActivation(ActivationFunction):
         around 40% faster than the naive `return 1 / (1 + np.exp(-x))` implementation.
         """
         arr = np.zeros_like(x, dtype=np.float32)
-        np.multiply(x, np.float32(-1.0), out=arr)
+        np.exp(-x, out=arr)
         np.add(arr, np.float32(1.0), out=arr)
         np.reciprocal(arr, out=arr)
         return arr
@@ -47,6 +47,19 @@ class SigmoidActivation(ActivationFunction):
     def derivative(self, x: np.ndarray) -> np.ndarray:
         s = self.forward(x)
         return s * (1 - s)
+
+
+class TanhActivation(ActivationFunction):
+    """Tanh Activation Function"""
+
+    def forward(self, x: np.ndarray) -> np.ndarray:
+        # Compute the hyperbolic tangent element-wise and cast to float32.
+        return np.tanh(x).astype(np.float32)
+
+    def derivative(self, x: np.ndarray) -> np.ndarray:
+        # The derivative of tanh is 1 - tanh^2(x)
+        t = np.tanh(x).astype(np.float32)
+        return 1 - t * t
 
 
 class IdentityActivation(ActivationFunction):
