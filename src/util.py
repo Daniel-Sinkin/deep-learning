@@ -24,7 +24,7 @@ class LearningRateScheduling:
         return lr_min + 0.5 * (lr_max - lr_min) * (1 + np.cos(t / t_max * np.pi))
 
 
-def main() -> None:
+def example() -> None:
     """Plots the LearningRateScheduling functions in one plot and saves the result to a png."""
     lr_max = 1.0
     lr_min = 0.1
@@ -79,4 +79,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    example()

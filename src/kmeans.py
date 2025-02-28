@@ -146,7 +146,7 @@ class KMeans:
         return min_centroids
 
 
-def main() -> None:
+def example() -> None:
     """Runs Kmeans until there is no more improvement, saves every iteration as screenshots."""
     iteration = 0
     kmeans = KMeans.from_blobs()
@@ -164,4 +164,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    example()

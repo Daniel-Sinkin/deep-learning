@@ -11,6 +11,7 @@ class KNN:
         self.colors = ["red", "green", "blue", "orange"]
 
     def classify_sample(self, sample, K):
+        """Returns index of nearest sample, the distance to it and the corresponding label."""
         dx = (self.samples[:, 0] - sample[0]) ** 2
         dy = (self.samples[:, 1] - sample[1]) ** 2
         nearest_idxs = np.argpartition(dx + dy, K)[:K]
@@ -25,6 +26,7 @@ class KNN:
         return nearest_idxs, dist, int(dominant_label)
 
     def plot(self, sample, K):
+        """Plots."""
         nearest_idxs, dist, dominant_label = self.classify_sample(sample, K)
         colors = self.colors
         x_min = self.samples[:, 0].min()
@@ -80,6 +82,7 @@ class KNN:
         plt.show()
 
     def plot_zoomed(self, sample, K: int) -> None:
+        """Plots with a zoom around the KNN sphere."""
         nearest_idxs, dist, dominant_label = self.classify_sample(sample, K)
         colors = self.colors
         zoom_margin = 0.2 * dist
@@ -143,7 +146,8 @@ class KNN:
         plt.show()
 
 
-def main() -> None:
+def example() -> None:
+    """Example showing the different functionalities."""
     samples, t = make_blobs(n_samples=1000, centers=4, cluster_std=0.8, random_state=0)
     x_min = samples[:, 0].min()
     x_max = samples[:, 0].max()
@@ -156,10 +160,10 @@ def main() -> None:
     ys = 3.0
     K = 13
     knn = KNN(samples, t)
-    nearest_idxs, dist, dominant_label = knn.classify_sample((xs, ys), K)
+    _ = knn.classify_sample((xs, ys), K)
     knn.plot((xs, ys), K)
     knn.plot_zoomed((xs, ys), K)
 
 
 if __name__ == "__main__":
-    main()
+    example()

@@ -173,7 +173,7 @@ class ExpectationMaximization:
         )
 
 
-def main() -> None:
+def example() -> None:
     K = 4
     kmeans = KMeans.from_blobs(K=K, cluster_std=1.5)
     for _ in range(5):
@@ -188,4 +188,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    example()
