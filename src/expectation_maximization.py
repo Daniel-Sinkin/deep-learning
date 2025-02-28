@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Ellipse
@@ -124,7 +126,7 @@ class ExpectationMaximization:
         )
         ax.add_patch(ellipse)
 
-    def plot(self) -> None:
+    def plot(self, show_fig: bool = True, filepath=None) -> None:
         """
         Visualize the current state of the EM algorithm.
         Plots the data points colored by their most likely cluster and overlays the Gaussian ellipses.
@@ -154,7 +156,12 @@ class ExpectationMaximization:
         plt.title("EM Algorithm State: Gaussian Mixtures")
         plt.xlabel("Feature 1")
         plt.ylabel("Feature 2")
-        plt.show()
+        if filepath is not None:
+            plt.savefig(filepath, dpi=300)
+        if show_fig:
+            plt.show()
+        else:
+            plt.close()
 
     @staticmethod
     def from_kmeans(kmeans: KMeans) -> ExpectationMaximization:
@@ -172,12 +179,12 @@ def main() -> None:
     for _ in range(5):
         kmeans.update()
 
-    kmeans.plot()
+    kmeans.plot(show_fig=False, filepath="./screenshots/em/kmeans.png")
 
     em = ExpectationMaximization.from_kmeans(kmeans=kmeans)
-    for _ in range(5):
+    for i in range(5):
         em.update()
-        em.plot()
+        em.plot(show_fig=False, filepath=f"./screenshots/em/{i}.png")
 
 
 if __name__ == "__main__":
