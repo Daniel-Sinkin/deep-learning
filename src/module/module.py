@@ -16,5 +16,8 @@ class Module(ABC):
     def backward(self, x: np.ndarray, y: np.ndarray, lr: float) -> float:
         """Does the backward pass. Returns the loss."""
 
+    def get_parameters():
+        raise NotImplementedError("Will be come abstractmethod later on.")
+
     def __call__(self, *args, **kwargs) -> np.ndarray:
         return self.forward(*args, **kwargs)

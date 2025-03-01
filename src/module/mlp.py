@@ -55,6 +55,7 @@ class MLP(Module):
         return a
 
     def backward(self, x, y, lr=0.001) -> float:
+        """TODO: Replace this with something that is aligned with the pytorch implementation."""
         out = self.forward(x)
 
         delta = out - y
