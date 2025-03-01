@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 import torch
 
-from .rnn import RNNModel
+from src.module.rnn import RNN
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ def sample_input():
 def numpy_rnn(sample_input):
     """Fixture that creates the numpy-based RNN model with a fixed seed."""
     _, d_in, d_out = sample_input
-    model = RNNModel(d_in, d_out, seed=42)
+    model = RNN(d_in, d_out, seed=42)
     return model
 
 

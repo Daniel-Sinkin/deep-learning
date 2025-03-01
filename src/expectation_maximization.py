@@ -7,7 +7,7 @@ import numpy as np
 from matplotlib.patches import Ellipse
 from scipy.stats import multivariate_normal
 
-from .kmeans import KMeans
+from .algo.kmeans import KMeans
 
 
 class ExpectationMaximization:

@@ -2,12 +2,13 @@
 
 import numpy as np
 
-from .activation_function import SigmoidActivation
-from .functions import conv2d
-from .nn import Model
+from src.activation_function import SigmoidActivation
+from src.functions import conv2d
+
+from .module import Module
 
 
-class CNNModel(Model):
+class CNN(Module):
     """Convolutional Neural Network with Simoid activation function."""
 
     def __init__(

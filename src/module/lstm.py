@@ -2,11 +2,12 @@
 
 import numpy as np
 
-from .activation_function import SigmoidActivation, TanhActivation
-from .nn import Model
+from src.activation_function import SigmoidActivation, TanhActivation
+
+from .module import Module
 
 
-class LSTM(Model):
+class LSTM(Module):
     """Long Short-Term Memory"""
 
     def __init__(self, d_in: int, d_out: int, seed=None):

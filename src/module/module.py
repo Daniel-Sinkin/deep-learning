@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 
-class Model(ABC):
+class Module(ABC):
     """Baseclass for a Neural Model building block."""
 
     @abstractmethod

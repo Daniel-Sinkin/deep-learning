@@ -2,11 +2,12 @@
 
 import numpy as np
 
-from .activation_function import ReLUActivation, SigmoidActivation
-from .nn import Model
+from src.activation_function import ReLUActivation, SigmoidActivation
+
+from .module import Module
 
 
-class MLPModel(Model):
+class MLP(Module):
     """Multi-Layer Perceptron Model"""
 
     def __init__(self, layers: list[int], seed=None):

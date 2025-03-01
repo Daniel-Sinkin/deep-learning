@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.datasets import make_moons
 from sklearn.preprocessing import StandardScaler
 
-from src.mlp_model import MLPModel, ReLUActivation, SigmoidActivation
+from src.module_mlp import MLP, ReLUActivation, SigmoidActivation
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
     X = scaler.fit_transform(X.T).T
 
     layers = [2, 20, 40, 20, 1]
-    mlp = MLPModel(
+    mlp = MLP(
         layers,
         hidden_activation="relu",
         output_activation="sigmoid",

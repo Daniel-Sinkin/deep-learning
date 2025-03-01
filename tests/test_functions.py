@@ -5,7 +5,7 @@ import pytest
 import torch
 import torch.nn.functional as F
 
-from .functions import conv2d
+from src.functions import conv2d
 
 
 @pytest.mark.parametrize(

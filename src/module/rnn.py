@@ -2,11 +2,12 @@
 
 import numpy as np
 
-from .activation_function import TanhActivation
-from .nn import Model
+from src.activation_function import TanhActivation
+
+from .module import Module
 
 
-class RNNModel(Model):
+class RNN(Module):
     """Recurrent Neural Network Model using float32 throughout."""
 
     def __init__(self, d_in: int, d_out: int, seed=None):
